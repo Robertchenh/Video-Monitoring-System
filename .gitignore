@@ -1,0 +1,4 @@
+datasave/*
+__pycache__/*
+test.py
+.idea/*
