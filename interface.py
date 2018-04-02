@@ -1,6 +1,6 @@
-from tkinter import *
+from Tkinter import *
 from profile import def_val
-from serve_request import chang_size, draw_mouse
+from serve_request import chang_size
 import Image, ImageTk
 import cv2
 import numpy as np
@@ -14,9 +14,6 @@ import os
 import threading
 import inspect
 import ctypes
-
-
-
 
 def center_window(w, h, root):
     ws = root.winfo_screenwidth()
@@ -85,25 +82,21 @@ def OFF_fun():
     pass
 
 def RESET_fun():
-    profile.clear_global_detect_area()
-
-def LAST_fun():
-    pass
-
-def NEXT_fun():
-    pass
+    profile.clear_global_detect_areas()
 
 
-def ADD_fun():
-    if profile.get_global_add_area():
-        detect_area = profile.get_global_detect_area()
-        detect_area_len = len(detect_area)
-        global_temvar = copy.deepcopy(profile.get_global_temvar())
-        area_dict = {str(detect_area_len + 1): global_temvar}
-        print(type(area_dict))
-        profile.set_global_detect_area(area_dict)
-        profile.clear_global_temvar()
-        profile.set_global_add_area(False)
+
+
+# def ADD_fun():
+#     if profile.get_global_add_area():
+#         detect_area = profile.get_global_detect_area()
+#         detect_area_len = len(detect_area)
+#         global_temvar = copy.deepcopy(profile.get_global_temvar())
+#         area_dict = {str(detect_area_len + 1): global_temvar}
+#         print(type(area_dict))
+#         profile.set_global_detect_area(area_dict)
+#         profile.clear_global_temvar()
+#         profile.set_global_add_area(False)
 
 
 def DELETE_fun(img_canvas):
@@ -193,26 +186,24 @@ class MyText:
 
         # self.after(10, self.action())
 
-
-
-
 def t1frame_items(frame):
-    LAST_button = Button(frame, text='LAST', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove', command=LAST_fun())
+    LAST_button = Button(frame, text='LAST', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
     LAST_button.place(x=25, y=75, anchor=CENTER)
 
 def t7frame_items(frame):
-    NEXT_button = Button(frame, text='NEXT', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove', command=NEXT_fun())
+    NEXT_button = Button(frame, text='NEXT', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
     NEXT_button.place(x=25, y=75, anchor=CENTER)
 
 def mouse_motion_fun(event):
-    draw_mouse()
-    img_info = profile.get_global_img_info()
+    # draw_mouse()
+    show_id = profile.get_global_camera_show_id()
+    img_info = profile.get_global_img_infos(show_id)
     # print (event.x, event.y)
     if img_info[2] < event.y and event.y < img_info[3]:
         profile.set_global_mouse_xy(copy.deepcopy([event.x -2, event.y - img_info[2] -2]))
         # print([event.x -2, event.y - img_info[2] -2])
         profile.set_global_temvar(profile.get_global_mouse_xy()[0], profile.get_global_mouse_xy()[1])
-        print profile.get_global_temvar()
+        # print profile.get_global_temvar()
 
 
 def mouse_in_fun(event):
@@ -225,6 +216,7 @@ def mouse_out_fun(event):
     print("mouse out")
 
 def add_point_fun(event):
+
     mousexy = profile.get_global_mouse_xy()
     temvar = profile.get_global_temvar()
 
@@ -242,20 +234,17 @@ def add_point_fun(event):
 
 
 def add_point_fun01(event):
-    img_info = profile.get_global_img_info()
+    show_id = profile.get_global_camera_show_id()
+    img_info = profile.get_global_img_infos(show_id)
     # print (event.x, event.y)
     if img_info[2] < event.y and event.y < img_info[3]:
         profile.clear_global_temvar()
         profile.set_global_temvar(copy.deepcopy(event.x - 2), copy.deepcopy(event.y - img_info[2] - 2))
     # print('+++++++++++++++++')
 
-
-
-
-
 def interface(thread_videofun, thread_framedetection):
 
-    time.sleep(1)
+    time.sleep(2)
     # video_length = len(videolist)
     # success01, frame01 = videolist[0].read()
     # frame01, img_scale01 = chang_size(frame01)
@@ -283,27 +272,99 @@ def interface(thread_videofun, thread_framedetection):
     OFF_button = Button(lframe, text='OFF', width=7, height=3, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
     OFF_button.place(x=50, y=180, anchor=CENTER)
 
-
-
     RESET_button = MyButton('RESET', lframe, 7, 3, 50, 270, RESET_fun)
     # ADD_button = MyButton('ADD', lframe, 7, 3, 50, 360, ADD_fun)
     # DELETE_button = MyButton('DELETE', lframe, 7, 3, 50, 450, DELETE_fun)
     # CLS_button = MyButton('CLS', lframe, 7, 3, 50, 540, CLS_fun)
-
-
     info_show = MyText(r2frame, 800, 350)
 
-
-
-
-
-    # t1frame_items(t1frame)
-    # t7frame_items(t7frame)
-
-
+    LAST_button = Button(t1frame, text='LAST', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
+    LAST_button.place(x=25, y=75, anchor=CENTER)
+    NEXT_button = Button(t7frame, text='NEXT', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
+    NEXT_button.place(x=25, y=75, anchor=CENTER)
 
     label_img = Label(img_canvas, width=def_val.cframe_width, height=def_val.cframe_height, bg='#EEDFCC')
     label_img.place(x=425, y=425, anchor=CENTER)
+
+
+    label_t2 = Frame(t2frame, width=146, height=150, bg=def_val.top_image_notshow_bg)
+    label_t2.place(x=75, y=75, anchor=CENTER)
+    label_t3 = Frame(t3frame, width=146, height=150, bg=def_val.top_image_notshow_bg)
+    label_t3.place(x=75, y=75, anchor=CENTER)
+    label_t4 = Frame(t4frame, width=146, height=150, bg=def_val.top_image_notshow_bg)
+    label_t4.place(x=75, y=75, anchor=CENTER)
+    label_t5 = Frame(t5frame, width=146, height=150, bg=def_val.top_image_notshow_bg)
+    label_t5.place(x=75, y=75, anchor=CENTER)
+    label_t6 = Frame(t6frame, width=146, height=150, bg=def_val.top_image_notshow_bg)
+    label_t6.place(x=75, y=75, anchor=CENTER)
+
+    lable_ts = [label_t2, label_t3, label_t4, label_t5, label_t6]
+
+
+
+
+    showlabel_t2 = Label(label_t2, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t2.place(x=73, y=73, anchor=CENTER)
+    showlabel_t3 = Label(label_t3, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t3.place(x=73, y=73, anchor=CENTER)
+    showlabel_t4 = Label(label_t4, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t4.place(x=73, y=73, anchor=CENTER)
+    showlabel_t5 = Label(label_t5, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t5.place(x=73, y=73, anchor=CENTER)
+    showlabel_t6 = Label(label_t6, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t6.place(x=73, y=73, anchor=CENTER)
+
+    showlable_ts = [showlabel_t2, showlabel_t3, showlabel_t4, showlabel_t5, showlabel_t6]
+
+    def show_topframe(label, id):
+        frame = profile.get_global_frame_dets(id)
+        frame, _ = chang_size(frame, 146.)
+        cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+        img = Image.fromarray(cv2image)
+        imgtk = ImageTk.PhotoImage(image=img)
+        label.imgtk = imgtk
+        label.configure(image=imgtk)
+
+    def change_bg(id):
+        for i in range(5):
+            lable_ts[i]['bg'] = def_val.top_image_notshow_bg
+        lable_ts[id]['bg'] = def_val.top_image_show_bg
+
+
+    def show_topframes():
+        camera_num = profile.get_global_camera_num()
+        show_id = profile.get_global_camera_show_id()
+        if camera_num < 5:
+            for i in range(camera_num):
+                show_topframe(showlable_ts[i], i)
+            change_bg(show_id)
+
+        else:
+            if show_id < 5:
+                for i in range(5):
+                    show_topframe(showlable_ts[i], i)
+            else:
+                for i in range(5):
+                    show_topframe(showlable_ts[4 - i], show_id - i)
+
+    def LAST_fun(event):
+        show_id = profile.get_global_camera_show_id()
+        if show_id > 0:
+            show_id = show_id - 1
+            profile.set_global_camera_show_id(show_id)
+
+    def NEXT_fun(event):
+        cameranum = profile.get_global_camera_num()
+        show_id = profile.get_global_camera_show_id()
+        if show_id < (cameranum - 1):
+            show_id = show_id + 1
+            profile.set_global_camera_show_id(show_id)
+
+
+
+
+
+
 
     def MessageBox():
         temvar = profile.get_global_temvar()
@@ -313,6 +374,7 @@ def interface(thread_videofun, thread_framedetection):
             if len(key) < 1  or key[0]==' ':
                 message.set('Wrong id! enter again!')
             else:
+                show_id = profile.get_global_camera_show_id()
                 profile.set_global_key_in(key)
                 message.set('Submit Successful!')
                 global_temvar = copy.deepcopy(profile.get_global_temvar())
@@ -320,7 +382,7 @@ def interface(thread_videofun, thread_framedetection):
                     area_dict = {profile.get_global_key_in(): global_temvar}
                     print(area_dict)
                     print('add area')
-                    profile.set_global_detect_area(area_dict)
+                    profile.set_global_detect_areas(show_id, area_dict)
                     profile.clear_global_temvar()
                     profile.set_global_add_area(False)
                     # key_in.grid_forget()
@@ -362,12 +424,9 @@ def interface(thread_videofun, thread_framedetection):
             MessageBox()
 
 
-
-
-
-
     def show_frame():
-        frame = profile.get_global_frame()
+        show_id = profile.get_global_camera_show_id()
+        frame = profile.get_global_frames(show_id)
         # frame = cv2.flip(frame, 1)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
@@ -377,6 +436,7 @@ def interface(thread_videofun, thread_framedetection):
         # if profile.get_global_mousein():
         #     draw_mouse()
         info_show.action()
+        show_topframes()
         label_img.after(10, show_frame)
 
     def movewindow_fun(event):
@@ -410,7 +470,7 @@ def interface(thread_videofun, thread_framedetection):
         stop_thread(thread_videofun)
         stop_thread(thread_framedetection)
         sys.exit()
-        print('end of program')
+        # print('end of program')
 
     # label_img.bind('<Motion>', mouse_motion_fun)
     label_img.bind('<B1-Motion>', mouse_motion_fun)
@@ -426,13 +486,12 @@ def interface(thread_videofun, thread_framedetection):
     # label_img.bind('<B1-Motion>', add_point_fun01)
     label_img.bind('<ButtonRelease-1>', add_area_fun)
 
-
-
-
-
     topframe.bind('<B1-Motion>', movewindow_fun)
     topframe.bind('<ButtonRelease-1>', mouse_release_fun)
     OFF_button.bind('<Button-1>', thread_off)
+
+    LAST_button.bind('<Button-1>', LAST_fun)
+    NEXT_button.bind('<Button-1>', NEXT_fun)
 
     show_frame()
     root.mainloop()
