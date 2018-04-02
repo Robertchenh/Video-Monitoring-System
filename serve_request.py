@@ -69,6 +69,21 @@ def set_img_infos(id, frame):
     y2 = int(round((850 - img_height) / 2, 0)) + int(img_height)
     profile.set_global_img_infos(id, [img_width, img_height, y1, y2])
 
+def areafun(xylist1, xylist2):
+    xy_1_1 = [min(xylist1[0][0], xylist1[1][0]), min(xylist1[0][1], xylist1[1][1])]
+    xy_1_2 = [max(xylist1[0][0], xylist1[1][0]), max(xylist1[0][1], xylist1[1][1])]
+    xy_2_1 = [min(xylist2[0][0], xylist2[1][0]), min(xylist2[0][1], xylist2[1][1])]
+    xy_2_2 = [max(xylist2[0][0], xylist2[1][0]), max(xylist2[0][1], xylist2[1][1])]
+    min_x = max(xy_1_1[0], xy_2_1[0])
+    min_y = max(xy_1_1[1], xy_2_1[1])
+    max_x = min(xy_1_2[0], xy_2_2[0])
+    max_y = min(xy_1_2[1], xy_2_2[1])
+    if(min_x < max_x) and (min_y < max_y):
+        s = (max_x - min_x) * (max_y - min_y)
+    else:
+        s = 0
+    return s
+
 
 
 def framedetectionfun():
@@ -103,13 +118,15 @@ def framedetectionfun():
                     y2 = int(bbox_val[3])
                     for key, values in target_area.items():
                         in_var = False
-                        values.append([values[0][0], values[1][1]])
-                        values.append([values[1][0], values[0][1]])
-
-                        for v in range(len(values)):
-                            if min(x1, x2) < values[v][0] and values[v][0] < max(x1, x2):
-                                if min(y1, y2) < values[v][1] and values[v][1] < max(y1, y2):
-                                    in_var = True
+                        # values.append([values[0][0], values[1][1]])
+                        # values.append([values[1][0], values[0][1]])
+                        #
+                        # for v in range(len(values)):
+                        #     if min(x1, x2) < values[v][0] and values[v][0] < max(x1, x2):
+                        #         if min(y1, y2) < values[v][1] and values[v][1] < max(y1, y2):
+                        area = areafun([[x1, y1],[x2, y2]], values)
+                        if area > 0:
+                            in_var = True
                         if in_var:
                             pepole_num[key] = pepole_num[key] + 1
 

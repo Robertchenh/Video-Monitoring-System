@@ -40,11 +40,6 @@ def videofun():
         else:
             break
     profile.set_global_camera_num(num_cameiras)
-    # for i in range(num_cameiras):
-    #     videoCapture = cv2.VideoCapture(i)
-    #     videoCapturelist.append(videoCapture)
-    #     success, frame = videoCapture.read()
-    #     set_img_infos(i, frame)
     while True:
         for i in range(num_cameiras):
             success, frame = videoCapturelist[i].read()
@@ -62,9 +57,6 @@ def interfacefun(thread_videofun, thread_framedetection):
     interface(thread_videofun, thread_framedetection)
 
 if __name__ == '__main__':
-    # num_cameiras = countCameras()
-    # profile.set_global_camera_num(num_cameiras)
-    # if num_cameiras:
     thread_videofun = Thread(target=videofun)
     thread_framedetection = Thread(target=framedetectionfun)
     thread_start()

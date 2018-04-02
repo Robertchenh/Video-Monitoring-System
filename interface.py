@@ -245,21 +245,10 @@ def add_point_fun01(event):
 def interface(thread_videofun, thread_framedetection):
 
     time.sleep(2)
-    # video_length = len(videolist)
-    # success01, frame01 = videolist[0].read()
-    # frame01, img_scale01 = chang_size(frame01)
-
-    # frame01 = cv2.imread('test.jpg')
     root = Tk()
     center_window(def_val.root_width, def_val.root_height, root)
     root.resizable(def_val.root_resizable, def_val.root_resizable)
-
-    # root.overrideredirect(1)
     root.wm_attributes('-type', 'splash')
-
-    # root.wm_attributes('-topmost', 0)
-    # root.wm_attributes('-alpha', 0)
-
     topframe, lframe, t1frame, t2frame, t3frame, t4frame, t5frame, t6frame, t7frame, cframe, r1frame, r2frame, r3frame = major_interface(root)
     img_canvas = Canvas(cframe, width=def_val.cframe_width, height=def_val.cframe_height, bg='#000000')
     img_canvas.grid()
@@ -268,14 +257,10 @@ def interface(thread_videofun, thread_framedetection):
     softwarename = Label(topframe, text='Video Monitoring System',  font=('Times', 12), height=1, fg='#FF0000', bg='#000000')
     softwarename.grid()
 
-    # OFF_button = MyButton('OFF', lframe, 7, 3, 50, 180, OFF_fun)
     OFF_button = Button(lframe, text='OFF', width=7, height=3, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
     OFF_button.place(x=50, y=180, anchor=CENTER)
 
     RESET_button = MyButton('RESET', lframe, 7, 3, 50, 270, RESET_fun)
-    # ADD_button = MyButton('ADD', lframe, 7, 3, 50, 360, ADD_fun)
-    # DELETE_button = MyButton('DELETE', lframe, 7, 3, 50, 450, DELETE_fun)
-    # CLS_button = MyButton('CLS', lframe, 7, 3, 50, 540, CLS_fun)
     info_show = MyText(r2frame, 800, 350)
 
     LAST_button = Button(t1frame, text='LAST', width=2, height=8, fg='#FF0000', bg='#D3D3D3', bd=3, relief='groove')
@@ -297,10 +282,7 @@ def interface(thread_videofun, thread_framedetection):
     label_t5.place(x=75, y=75, anchor=CENTER)
     label_t6 = Frame(t6frame, width=146, height=150, bg=def_val.top_image_notshow_bg)
     label_t6.place(x=75, y=75, anchor=CENTER)
-
     lable_ts = [label_t2, label_t3, label_t4, label_t5, label_t6]
-
-
 
 
     showlabel_t2 = Label(label_t2, width=146, height=146, bg=def_val.t6frame_bg)
@@ -313,7 +295,6 @@ def interface(thread_videofun, thread_framedetection):
     showlabel_t5.place(x=73, y=73, anchor=CENTER)
     showlabel_t6 = Label(label_t6, width=146, height=146, bg=def_val.t6frame_bg)
     showlabel_t6.place(x=73, y=73, anchor=CENTER)
-
     showlable_ts = [showlabel_t2, showlabel_t3, showlabel_t4, showlabel_t5, showlabel_t6]
 
     def show_topframe(label, id):
@@ -360,12 +341,6 @@ def interface(thread_videofun, thread_framedetection):
             show_id = show_id + 1
             profile.set_global_camera_show_id(show_id)
 
-
-
-
-
-
-
     def MessageBox():
         temvar = profile.get_global_temvar()
 
@@ -389,39 +364,37 @@ def interface(thread_videofun, thread_framedetection):
                     # quit
                     key_in.destroy()
 
+        def delete():
+            profile.clear_global_temvar()
+            key_in.destroy()
+
+
         if len(temvar) > 1:
             key_in = Toplevel(img_canvas)
             key_in.wm_attributes('-type', 'splash')
             key_in.title('enter id!')
             xy = profile.get_global_root_xy()
-            key_in.geometry('%dx%d+%d+%d' % (200, 100, xy[0] + 500, xy[1] + 500))
+            key_in.geometry('%dx%d+%d+%d' % (200, 130, xy[0] + 500, xy[1] + 500))
 
-            Label(key_in, text='Please enter the id: ', fg = "#FF0000", font=('Times', 14)).pack()
+            Label(key_in, text='Please enter the id: ', fg = "#FF0000", font=('Times', 14)).place(x=100, y=15, anchor=CENTER)
             sheet_text = StringVar()
             entry = Entry(key_in, textvariable=sheet_text)
-            entry.pack()
+            entry.place(x=100, y=45, anchor=CENTER)
             sheet_text.set('')
             message = StringVar()
-            Label(key_in, textvariable=message).pack()
+            Label(key_in, textvariable=message).place(x=100, y=75, anchor=CENTER)
             message.set('')
-            Button(key_in, text='Submit', command=savekey).pack()
+            Button(key_in, text='Submit', command=savekey).place(x=50, y=105, anchor=CENTER)
+            Button(key_in, text='Delete', command=delete).place(x=150, y=105, anchor=CENTER)
 
-        # keybutton.bind('<Button-1>', savekey)
-        # keybutton.bind('<Button-1>', savekey)
+
 
 
     def add_area_fun(event):
+        MessageBox()
+        # thread_MessageBox = Thread(target=MessageBox())
+        # thread_MessageBox.start()
 
-        # detect_area = profile.get_global_detect_area()
-        # detect_area_len = len(detect_area)
-        # global_temvar = copy.deepcopy(profile.get_global_temvar())
-        # if len(global_temvar) > 1:
-        #     area_dict = {str(detect_area_len + 1): global_temvar}
-        #     print('add area')
-        #     profile.set_global_detect_area(area_dict)
-        #     profile.clear_global_temvar()
-        #     profile.set_global_add_area(False)
-            MessageBox()
 
 
     def show_frame():
@@ -472,18 +445,13 @@ def interface(thread_videofun, thread_framedetection):
         sys.exit()
         # print('end of program')
 
-    # label_img.bind('<Motion>', mouse_motion_fun)
     label_img.bind('<B1-Motion>', mouse_motion_fun)
     label_img.bind('<Button-1>', add_point_fun01)
-
 
     label_img.bind('<Enter>', mouse_in_fun)
 
     label_img.bind('<Leave>', mouse_out_fun)
 
-    # label_img.bind('<Button-1>', add_point_fun)
-
-    # label_img.bind('<B1-Motion>', add_point_fun01)
     label_img.bind('<ButtonRelease-1>', add_area_fun)
 
     topframe.bind('<B1-Motion>', movewindow_fun)
