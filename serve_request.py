@@ -90,6 +90,12 @@ def framedetectionfun():
         print("cameras is readying, please waiting!\n")
         if camera_ready:
             break
+    camera_num = profile.get_global_camera_num()
+    while True:
+        if not camera_num:
+            print("no camera")
+        else:
+            break
     url = "http://localhost:9080"
     cmera_num = profile.get_global_camera_num()
     while (True):

@@ -248,6 +248,12 @@ def interface(thread_videofun, thread_framedetection):
         print("cameras is readying, please waiting!\n")
         if camera_ready:
             break
+    camera_num = profile.get_global_camera_num()
+    while True:
+        if not camera_num:
+            print("no camera")
+        else:
+            break
     root = Tk()
     center_window(def_val.root_width, def_val.root_height, root)
     root.resizable(def_val.root_resizable, def_val.root_resizable)
