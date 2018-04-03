@@ -257,7 +257,7 @@ def interface(thread_videofun, thread_framedetection):
     root = Tk()
     center_window(def_val.root_width, def_val.root_height, root)
     root.resizable(def_val.root_resizable, def_val.root_resizable)
-    root.wm_attributes('-type', 'splash')
+    # root.wm_attributes('-type', 'splash')
     topframe, lframe, t1frame, t2frame, t3frame, t4frame, t5frame, t6frame, t7frame, cframe, r1frame, r2frame, r3frame = major_interface(root)
     img_canvas = Canvas(cframe, width=def_val.cframe_width, height=def_val.cframe_height, bg='#000000')
     img_canvas.grid()
@@ -333,6 +333,7 @@ def interface(thread_videofun, thread_framedetection):
             if show_id < 5:
                 for i in range(5):
                     show_topframe(showlable_ts[i], i)
+                    change_bg(show_id)
             else:
                 for i in range(5):
                     show_topframe(showlable_ts[4 - i], show_id - i)

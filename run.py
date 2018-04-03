@@ -32,11 +32,13 @@ def videofun():
     num_cameiras = profile.get_global_camera_num()
     videoCapturelist = []
     camera_id = profile.get_global_camera_id()
+    k = 0
     for i in camera_id:
         videoCapture = cv2.VideoCapture(i)
         videoCapturelist.append(videoCapture)
         success, frame = videoCapture.read()
-        set_img_infos(i, frame)
+        set_img_infos(k, frame)
+        k = k + 1
     camera_ready = False
     while True:
         for i in range(num_cameiras):
