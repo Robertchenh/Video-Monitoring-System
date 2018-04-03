@@ -52,6 +52,8 @@ class global_val():
 
     camera_show_id = 0
 
+    camera_ready = False
+
 
 
 
@@ -169,6 +171,11 @@ def get_global_add_area():
 
 def set_global_message_log(message):
     global_val.message_log.append(message)
+    print(len(global_val.message_log))
+    if len(global_val.message_log) > 1000:
+        global_val.message_log = global_val.message_log[-100:-1]
+
+
 
 def get_global_message_log():
     return global_val.message_log
@@ -294,7 +301,11 @@ def get_global_camera_show_id():
     return global_val.camera_show_id
 
 
+def set_global_camera_ready(bool_var):
+    global_val.camera_ready = bool_var
 
+def get_global_camera_ready():
+    return global_val.camera_ready
 
 def_val = edict()
 

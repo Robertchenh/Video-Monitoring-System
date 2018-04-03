@@ -243,8 +243,11 @@ def add_point_fun01(event):
     # print('+++++++++++++++++')
 
 def interface(thread_videofun, thread_framedetection):
-
-    time.sleep(2)
+    while True:
+        camera_ready = profile.get_global_camera_ready()
+        print("cameras is readying, please waiting!\n")
+        if camera_ready:
+            break
     root = Tk()
     center_window(def_val.root_width, def_val.root_height, root)
     root.resizable(def_val.root_resizable, def_val.root_resizable)
@@ -285,15 +288,15 @@ def interface(thread_videofun, thread_framedetection):
     lable_ts = [label_t2, label_t3, label_t4, label_t5, label_t6]
 
 
-    showlabel_t2 = Label(label_t2, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t2 = Label(label_t2, width=146, height=146, bg=def_val.top_image_notshow_bg)
     showlabel_t2.place(x=73, y=73, anchor=CENTER)
-    showlabel_t3 = Label(label_t3, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t3 = Label(label_t3, width=146, height=146, bg=def_val.top_image_notshow_bg)
     showlabel_t3.place(x=73, y=73, anchor=CENTER)
-    showlabel_t4 = Label(label_t4, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t4 = Label(label_t4, width=146, height=146, bg=def_val.top_image_notshow_bg)
     showlabel_t4.place(x=73, y=73, anchor=CENTER)
-    showlabel_t5 = Label(label_t5, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t5 = Label(label_t5, width=146, height=146, bg=def_val.top_image_notshow_bg)
     showlabel_t5.place(x=73, y=73, anchor=CENTER)
-    showlabel_t6 = Label(label_t6, width=146, height=146, bg=def_val.t6frame_bg)
+    showlabel_t6 = Label(label_t6, width=146, height=146, bg=def_val.top_image_notshow_bg)
     showlabel_t6.place(x=73, y=73, anchor=CENTER)
     showlable_ts = [showlabel_t2, showlabel_t3, showlabel_t4, showlabel_t5, showlabel_t6]
 
@@ -370,22 +373,26 @@ def interface(thread_videofun, thread_framedetection):
 
 
         if len(temvar) > 1:
-            key_in = Toplevel(img_canvas)
-            key_in.wm_attributes('-type', 'splash')
-            key_in.title('enter id!')
-            xy = profile.get_global_root_xy()
-            key_in.geometry('%dx%d+%d+%d' % (200, 130, xy[0] + 500, xy[1] + 500))
+            s = abs((temvar[0][0] - temvar[1][0]) * (temvar[0][1] - temvar[1][1]))
+            if s > 10000:
+                key_in = Toplevel(img_canvas)
+                key_in.wm_attributes('-type', 'splash')
+                key_in.title('enter id!')
+                xy = profile.get_global_root_xy()
+                key_in.geometry('%dx%d+%d+%d' % (200, 130, xy[0] + 500, xy[1] + 500))
 
-            Label(key_in, text='Please enter the id: ', fg = "#FF0000", font=('Times', 14)).place(x=100, y=15, anchor=CENTER)
-            sheet_text = StringVar()
-            entry = Entry(key_in, textvariable=sheet_text)
-            entry.place(x=100, y=45, anchor=CENTER)
-            sheet_text.set('')
-            message = StringVar()
-            Label(key_in, textvariable=message).place(x=100, y=75, anchor=CENTER)
-            message.set('')
-            Button(key_in, text='Submit', command=savekey).place(x=50, y=105, anchor=CENTER)
-            Button(key_in, text='Delete', command=delete).place(x=150, y=105, anchor=CENTER)
+                Label(key_in, text='Please enter the id: ', fg = "#FF0000", font=('Times', 14)).place(x=100, y=15, anchor=CENTER)
+                sheet_text = StringVar()
+                entry = Entry(key_in, textvariable=sheet_text)
+                entry.place(x=100, y=45, anchor=CENTER)
+                sheet_text.set('')
+                message = StringVar()
+                Label(key_in, textvariable=message).place(x=100, y=75, anchor=CENTER)
+                message.set('')
+                Button(key_in, text='Submit', command=savekey).place(x=50, y=105, anchor=CENTER)
+                Button(key_in, text='Delete', command=delete).place(x=150, y=105, anchor=CENTER)
+            else:
+                profile.clear_global_temvar()
 
 
 

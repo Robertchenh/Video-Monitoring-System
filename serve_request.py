@@ -84,10 +84,12 @@ def areafun(xylist1, xylist2):
         s = 0
     return s
 
-
-
 def framedetectionfun():
-    time.sleep(2)
+    while True:
+        camera_ready = profile.get_global_camera_ready()
+        print("cameras is readying, please waiting!\n")
+        if camera_ready:
+            break
     url = "http://localhost:9080"
     cmera_num = profile.get_global_camera_num()
     while (True):
