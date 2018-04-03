@@ -54,6 +54,8 @@ class global_val():
 
     camera_ready = False
 
+    camera_id = []
+
 
 
 
@@ -306,6 +308,15 @@ def set_global_camera_ready(bool_var):
 
 def get_global_camera_ready():
     return global_val.camera_ready
+
+def set_global_camera_id(id):
+    global_val.camera_id = id
+
+def get_global_camera_id():
+    return global_val.camera_id
+
+
+
 
 def_val = edict()
 

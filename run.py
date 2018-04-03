@@ -14,21 +14,25 @@ from serve_request import set_img_infos, framedetectionfun
 
 def countCameras():
     num_cameiras = 0
+    camera_id =[]
     i = 0
     while(True):
         videoCapture = cv2.VideoCapture(i)
         success, frame = videoCapture.read()
         if success:
             num_cameiras = num_cameiras + 1
-            i = i + 1
-        else:
+            camera_id.append(i)
+        i = i + 1
+        if i > 6:
             break
+    profile.set_global_camera_id(camera_id)
     return num_cameiras
 
 def videofun():
     num_cameiras = profile.get_global_camera_num()
     videoCapturelist = []
-    for i in range(num_cameiras):
+    camera_id = profile.get_global_camera_id()
+    for i in camera_id:
         videoCapture = cv2.VideoCapture(i)
         videoCapturelist.append(videoCapture)
         success, frame = videoCapture.read()
